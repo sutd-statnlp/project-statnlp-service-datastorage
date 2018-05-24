@@ -11,6 +11,7 @@ func main() {
 
 	config.SetMiddleWares(router)
 	config.SetAPIPaths(router)
+	config.SetDbConnection()
 
 	router.Run(":9000")
 
