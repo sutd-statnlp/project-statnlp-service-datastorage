@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"../constant"
+	"../core/entity"
 	r "gopkg.in/gorethink/gorethink.v4"
 )
 
@@ -74,53 +75,67 @@ func (db RethinkDB) ContainTable(tableName string) bool {
 }
 
 // Insert .
-func (db RethinkDB) Insert(tableName string, instance interface{}) interface{} {
+func (db RethinkDB) Insert(tableName string, instance entity.Object) entity.Object {
 	_, err := r.DB(constant.DatabaseName).
 		Table(tableName).
 		Insert(instance).
 		RunWrite(db.Session)
 	if err != nil {
 		log.Panic(err)
-		return []interface{}{}
+		return entity.Object{}
 	}
 	return instance
 }
 
 // Find .
-func (db RethinkDB) Find(tableName string) []interface{} {
+func (db RethinkDB) Find(tableName string) []entity.Object {
 	res, err := r.DB(constant.DatabaseName).
 		Table(tableName).
 		Run(db.Session)
 	if err != nil {
 		log.Panic(err)
-		return []interface{}{}
+		return []entity.Object{}
 	}
 	defer res.Close()
-	var rows []interface{}
+	var rows []entity.Object
 	err = res.All(&rows)
 	if err != nil {
 		log.Panic(err)
-		return []interface{}{}
+		return []entity.Object{}
 	}
 	return rows
 }
 
 // FindByID .
-func (db RethinkDB) FindByID(tableName string, id string) interface{} {
+func (db RethinkDB) FindByID(tableName string, id string) entity.Object {
 	res, err := r.DB(constant.DatabaseName).
 		Table(tableName).
 		Get(id).
 		Run(db.Session)
 	if err != nil {
 		log.Panic(err)
-		return []interface{}{}
+		return entity.Object{}
 	}
 	defer res.Close()
-	var row interface{}
+	var row entity.Object
 	err = res.One(&row)
 	if err != nil {
 		log.Panic(err)
-		return []interface{}{}
+		return entity.Object{}
 	}
 	return row
+}
+
+// Update .
+func (db RethinkDB) Update(tableName string, id string, instance entity.Object) entity.Object {
+	_, err := r.DB(constant.DatabaseName).
+		Table(tableName).
+		Get(id).
+		Update(instance).
+		RunWrite(db.Session)
+	if err != nil {
+		log.Panic(err)
+		return entity.Object{}
+	}
+	return instance
 }

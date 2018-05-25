@@ -1,13 +1,14 @@
 package interactor
 
 import (
+	"../entity"
 	"../gateway"
 )
 
 // GetObjectInteractor .
 type GetObjectInteractor interface {
-	Get(objectName string) []interface{}
-	GetByObjectID(objectName string, objectID string) interface{}
+	Get(objectName string) []entity.Object
+	GetByObjectID(objectName string, objectID string) entity.Object
 }
 
 // GetObjectInteractorImpl is the implementation of GetObjectInteractor interface.
@@ -16,11 +17,11 @@ type GetObjectInteractorImpl struct {
 }
 
 // Get gets objects .
-func (interactor GetObjectInteractorImpl) Get(objectName string) []interface{} {
+func (interactor GetObjectInteractorImpl) Get(objectName string) []entity.Object {
 	return interactor.Gateway.Find(objectName)
 }
 
 // GetByObjectID gets object by ObjectID.
-func (interactor GetObjectInteractorImpl) GetByObjectID(objectName string, objectID string) interface{} {
+func (interactor GetObjectInteractorImpl) GetByObjectID(objectName string, objectID string) entity.Object {
 	return interactor.Gateway.FindByID(objectName, objectID)
 }

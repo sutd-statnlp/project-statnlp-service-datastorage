@@ -1,6 +1,9 @@
 package db
 
-import r "gopkg.in/gorethink/gorethink.v4"
+import (
+	"../core/entity"
+	r "gopkg.in/gorethink/gorethink.v4"
+)
 
 // CommonDatabase .
 type CommonDatabase interface {
@@ -8,7 +11,8 @@ type CommonDatabase interface {
 	CreateTable(tableName string) bool
 	GetTableNames() []string
 	ContainTable(tableName string) bool
-	Insert(tableName string, instance interface{}) interface{}
-	Find(tableName string) []interface{}
-	FindByID(tableName string, id string) interface{}
+	Insert(tableName string, instance entity.Object) entity.Object
+	Find(tableName string) []entity.Object
+	FindByID(tableName string, id string) entity.Object
+	Update(tableName string, id string, instance entity.Object) entity.Object
 }

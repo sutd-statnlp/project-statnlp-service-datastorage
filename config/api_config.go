@@ -18,6 +18,16 @@ func CreateAddObjectAPI(factory factory.ObjectFactory, gateway gateway.ObjectGat
 	}
 }
 
+// CreateUpdateObjectAPI .
+func CreateUpdateObjectAPI(factory factory.ObjectFactory, gateway gateway.ObjectGateway) api.UpdateObjectAPI {
+	return api.UpdateObjectAPIImpl{
+		Interactor: interactor.UpdateObjectInteractorImpl{
+			Factory: factory,
+			Gateway: gateway,
+		},
+	}
+}
+
 // CreateGetObjectAPI .
 func CreateGetObjectAPI(gateway gateway.ObjectGateway) api.GetObjectAPI {
 	return api.GetObjectAPIImpl{
@@ -31,13 +41,16 @@ func CreateGetObjectAPI(gateway gateway.ObjectGateway) api.GetObjectAPI {
 func SetAPIPaths(router *gin.Engine) {
 	objectFactory := CreateObjectFactory()
 	objectGateWay := CreateObjectGateway()
+
 	addObjectAPI := CreateAddObjectAPI(objectFactory, objectGateWay)
 	getObjectAPI := CreateGetObjectAPI(objectGateWay)
+	updateObjectAPI := CreateUpdateObjectAPI(objectFactory, objectGateWay)
 
 	apiGroup := router.Group("/api")
 	{
 		apiGroup.POST("/objects/:objectName", addObjectAPI.Add)
 		apiGroup.GET("/objects/:objectName", getObjectAPI.Get)
 		apiGroup.GET("/objects/:objectName/:objectId", getObjectAPI.GetByObjectID)
+		apiGroup.PUT("/objects/:objectName/:objectId", updateObjectAPI.Update)
 	}
 }
