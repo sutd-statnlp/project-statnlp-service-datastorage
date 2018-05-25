@@ -31,6 +31,10 @@ func (api GetObjectAPIImpl) GetByObjectID(context *gin.Context) {
 	objectName := context.Param("objectName")
 	objectID := context.Param("objectId")
 	log.Println("request to get Object:", objectName, " with ID:", objectID)
-	body := api.Interactor.GetByObjectID(objectName, objectID)
+	body, err := api.Interactor.GetByObjectID(objectName, objectID)
+	if err != nil {
+		context.JSON(400, err.Error())
+		return
+	}
 	context.JSON(200, body)
 }

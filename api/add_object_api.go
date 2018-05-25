@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 
-	"../core/entity"
 	"../core/interactor"
 	"github.com/gin-gonic/gin"
 )
@@ -28,8 +27,12 @@ func (api AddObjectAPIImpl) Add(context *gin.Context) {
 		context.JSON(400, err.Error())
 		return
 	}
-	var instance entity.Object
+	var instance interface{}
 	json.Unmarshal(bytes, &instance)
-	body := api.Interactor.Add(objectName, instance)
+	body, err := api.Interactor.Add(objectName, instance)
+	if err != nil {
+		context.JSON(400, err.Error())
+		return
+	}
 	context.JSON(200, body)
 }

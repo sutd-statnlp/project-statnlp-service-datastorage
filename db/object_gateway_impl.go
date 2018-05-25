@@ -8,7 +8,7 @@ type ObjectGatewayImpl struct {
 }
 
 // Insert .
-func (gateway ObjectGatewayImpl) Insert(objectName string, instance entity.Object) entity.Object {
+func (gateway ObjectGatewayImpl) Insert(objectName string, instance interface{}) (entity.Object, error) {
 	if !gateway.Datatbase.ContainTable(objectName) {
 		gateway.Datatbase.CreateTable(objectName)
 	}
@@ -21,11 +21,16 @@ func (gateway ObjectGatewayImpl) Find(objectName string) []entity.Object {
 }
 
 // FindByID .
-func (gateway ObjectGatewayImpl) FindByID(objectName string, objectID string) entity.Object {
+func (gateway ObjectGatewayImpl) FindByID(objectName string, objectID string) (entity.Object, error) {
 	return gateway.Datatbase.FindByID(objectName, objectID)
 }
 
 // Update .
-func (gateway ObjectGatewayImpl) Update(objectName string, objectID string, instance entity.Object) entity.Object {
+func (gateway ObjectGatewayImpl) Update(objectName string, objectID string, instance entity.Object) (entity.Object, error) {
 	return gateway.Datatbase.Update(objectName, objectID, instance)
+}
+
+// Delete .
+func (gateway ObjectGatewayImpl) Delete(objectName string, objectID string) (bool, error) {
+	return gateway.Datatbase.Delete(objectName, objectID)
 }

@@ -8,7 +8,7 @@ import (
 
 // AddObjectInteractor .
 type AddObjectInteractor interface {
-	Add(objectName string, instance entity.Object) entity.Object
+	Add(objectName string, instance interface{}) (entity.Object, error)
 }
 
 // AddObjectInteractorImpl is the implementation of AddObjectInteractor interface.
@@ -18,7 +18,7 @@ type AddObjectInteractorImpl struct {
 }
 
 // Add inserts new object.
-func (interactor AddObjectInteractorImpl) Add(objectName string, instance entity.Object) entity.Object {
+func (interactor AddObjectInteractorImpl) Add(objectName string, instance interface{}) (entity.Object, error) {
 	insertInstance := interactor.Factory.CreateWithIDAndTime(instance)
 	return interactor.Gateway.Insert(objectName, insertInstance)
 }

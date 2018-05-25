@@ -8,7 +8,7 @@ import (
 // GetObjectInteractor .
 type GetObjectInteractor interface {
 	Get(objectName string) []entity.Object
-	GetByObjectID(objectName string, objectID string) entity.Object
+	GetByObjectID(objectName string, objectID string) (entity.Object, error)
 }
 
 // GetObjectInteractorImpl is the implementation of GetObjectInteractor interface.
@@ -22,6 +22,6 @@ func (interactor GetObjectInteractorImpl) Get(objectName string) []entity.Object
 }
 
 // GetByObjectID gets object by ObjectID.
-func (interactor GetObjectInteractorImpl) GetByObjectID(objectName string, objectID string) entity.Object {
+func (interactor GetObjectInteractorImpl) GetByObjectID(objectName string, objectID string) (entity.Object, error) {
 	return interactor.Gateway.FindByID(objectName, objectID)
 }

@@ -9,8 +9,8 @@ import (
 
 // ObjectFactory .
 type ObjectFactory interface {
-	CreateWithID(instance entity.Object) entity.Object
-	CreateWithIDAndTime(instance entity.Object) entity.Object
+	CreateWithID(instance interface{}) entity.Object
+	CreateWithIDAndTime(instance interface{}) entity.Object
 	UpdateWithTime(instance entity.Object) entity.Object
 }
 
@@ -19,7 +19,7 @@ type ObjectFactoryImpl struct {
 }
 
 // CreateWithID create object instance with generated ID.
-func (factory ObjectFactoryImpl) CreateWithID(instance entity.Object) entity.Object {
+func (factory ObjectFactoryImpl) CreateWithID(instance interface{}) entity.Object {
 	return entity.Object{
 		ID:    generator.ObjectID(),
 		Extra: instance,
@@ -27,7 +27,7 @@ func (factory ObjectFactoryImpl) CreateWithID(instance entity.Object) entity.Obj
 }
 
 // CreateWithIDAndTime create object instance with generated ID, created and updated times.
-func (factory ObjectFactoryImpl) CreateWithIDAndTime(instance entity.Object) entity.Object {
+func (factory ObjectFactoryImpl) CreateWithIDAndTime(instance interface{}) entity.Object {
 	return entity.Object{
 		ID:        generator.ObjectID(),
 		CreatedAt: generator.CurrentDateTime(),

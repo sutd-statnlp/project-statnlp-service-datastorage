@@ -37,6 +37,15 @@ func CreateGetObjectAPI(gateway gateway.ObjectGateway) api.GetObjectAPI {
 	}
 }
 
+// CreateDeleteObjectAPI .
+func CreateDeleteObjectAPI(gateway gateway.ObjectGateway) api.DeleteObjectAPI {
+	return api.DeleteObjectAPIImpl{
+		Interactor: interactor.DeleteObjectInteractorImpl{
+			Gateway: gateway,
+		},
+	}
+}
+
 // SetAPIPaths sets API paths.
 func SetAPIPaths(router *gin.Engine) {
 	objectFactory := CreateObjectFactory()
@@ -45,6 +54,7 @@ func SetAPIPaths(router *gin.Engine) {
 	addObjectAPI := CreateAddObjectAPI(objectFactory, objectGateWay)
 	getObjectAPI := CreateGetObjectAPI(objectGateWay)
 	updateObjectAPI := CreateUpdateObjectAPI(objectFactory, objectGateWay)
+	deleteObjectAPI := CreateDeleteObjectAPI(objectGateWay)
 
 	apiGroup := router.Group("/api")
 	{
@@ -52,5 +62,6 @@ func SetAPIPaths(router *gin.Engine) {
 		apiGroup.GET("/objects/:objectName", getObjectAPI.Get)
 		apiGroup.GET("/objects/:objectName/:objectId", getObjectAPI.GetByObjectID)
 		apiGroup.PUT("/objects/:objectName/:objectId", updateObjectAPI.Update)
+		apiGroup.DELETE("/objects/:objectName/:objectId", deleteObjectAPI.Delete)
 	}
 }
