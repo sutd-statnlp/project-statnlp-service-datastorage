@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"log"
 
 	"../core/interactor"
@@ -21,12 +22,13 @@ type AddObjectAPIImpl struct {
 func (api AddObjectAPIImpl) Add(context *gin.Context) {
 	objectName := context.Param("objectName")
 	log.Println("request to add Object:", objectName)
-	var instance interface{}
-	err := context.Bind(instance)
+	bytes, err := context.GetRawData()
 	if err != nil {
-		context.JSON(400, err)
+		context.JSON(400, err.Error())
 		return
 	}
+	var instance interface{}
+	json.Unmarshal(bytes, &instance)
 	body := api.Interactor.Add(objectName, instance)
 	context.JSON(200, body)
 }

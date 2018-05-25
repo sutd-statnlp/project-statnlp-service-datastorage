@@ -7,7 +7,10 @@ import (
 
 // CreateObjectGateway .
 func CreateObjectGateway() gateway.ObjectGateway {
-	var rethinkObjectGateway db.RethinkObjectGatewayImpl
-	rethinkObjectGateway.Connect()
+	var database db.RethinkDB
+	database.Session = database.Connect()
+	rethinkObjectGateway := db.ObjectGatewayImpl{
+		Datatbase: database,
+	}
 	return rethinkObjectGateway
 }
