@@ -13,7 +13,7 @@ type AddObjectInteractor interface {
 // AddObjectInteractorImpl is the implementation of AddObjectInteractor interface.
 type AddObjectInteractorImpl struct {
 	Factory factory.ObjectFactory
-	Gateway gateway.ObjectGateWay
+	Gateway gateway.ObjectGateway
 }
 
 // Add inserts new object.

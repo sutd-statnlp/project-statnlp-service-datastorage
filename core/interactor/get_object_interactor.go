@@ -12,7 +12,7 @@ type GetObjectInteractor interface {
 
 // GetObjectInteractorImpl is the implementation of GetObjectInteractor interface.
 type GetObjectInteractorImpl struct {
-	Gateway gateway.ObjectGateWay
+	Gateway gateway.ObjectGateway
 }
 
 // Get gets objects .
