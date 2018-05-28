@@ -8,7 +8,7 @@ import (
 
 // UpdateObjectInteractor .
 type UpdateObjectInteractor interface {
-	Update(objectName string, objectID string, instance entity.Object) (entity.Object, error)
+	Update(objectName string, objectID string, instance interface{}) (entity.Object, error)
 }
 
 // UpdateObjectInteractorImpl is the implementation of UpdateObjectInteractor interface.
@@ -18,7 +18,11 @@ type UpdateObjectInteractorImpl struct {
 }
 
 // Update updates object.
-func (interactor UpdateObjectInteractorImpl) Update(objectName string, objectID string, instance entity.Object) (entity.Object, error) {
-	insertInstance := interactor.Factory.UpdateWithTime(instance)
-	return interactor.Gateway.Update(objectName, objectID, insertInstance)
+func (interactor UpdateObjectInteractorImpl) Update(objectName string, objectID string, instance interface{}) (entity.Object, error) {
+	updateInstance, err := interactor.Gateway.FindByID(objectName, objectID)
+	if err != nil {
+		return entity.Object{}, err
+	}
+	updateInstance = interactor.Factory.UpdateWithTime(updateInstance, instance)
+	return interactor.Gateway.Update(objectName, objectID, updateInstance)
 }

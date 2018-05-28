@@ -11,7 +11,7 @@ import (
 type ObjectFactory interface {
 	CreateWithID(instance interface{}) entity.Object
 	CreateWithIDAndTime(instance interface{}) entity.Object
-	UpdateWithTime(instance entity.Object) entity.Object
+	UpdateWithTime(updatedInstance entity.Object, instance interface{}) entity.Object
 }
 
 // ObjectFactoryImpl .
@@ -37,7 +37,8 @@ func (factory ObjectFactoryImpl) CreateWithIDAndTime(instance interface{}) entit
 }
 
 // UpdateWithTime update object instance with updated time.
-func (factory ObjectFactoryImpl) UpdateWithTime(instance entity.Object) entity.Object {
-	reflect.ValueOf(&instance).Elem().FieldByName("UpdatedAt").SetString(generator.CurrentDateTime())
-	return instance
+func (factory ObjectFactoryImpl) UpdateWithTime(updatedInstance entity.Object, instance interface{}) entity.Object {
+	reflect.ValueOf(&updatedInstance).Elem().FieldByName("UpdatedAt").SetString(generator.CurrentDateTime())
+	reflect.ValueOf(&updatedInstance).Elem().FieldByName("Extra").Set(reflect.ValueOf(&instance))
+	return updatedInstance
 }
