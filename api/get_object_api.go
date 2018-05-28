@@ -9,6 +9,7 @@ import (
 
 // GetObjectAPI .
 type GetObjectAPI interface {
+	GetAllObjectNames(context *gin.Context)
 	Get(context *gin.Context)
 	GetByObjectID(context *gin.Context)
 }
@@ -16,6 +17,17 @@ type GetObjectAPI interface {
 // GetObjectAPIImpl .
 type GetObjectAPIImpl struct {
 	Interactor interactor.GetObjectInteractor
+}
+
+// GetAllObjectNames .
+func (api GetObjectAPIImpl) GetAllObjectNames(context *gin.Context) {
+	log.Println("request to get all object's names")
+	body, err := api.Interactor.GetAll()
+	if err != nil {
+		context.JSON(400, err.Error())
+		return
+	}
+	context.JSON(200, body)
 }
 
 // Get .

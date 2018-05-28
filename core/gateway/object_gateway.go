@@ -4,6 +4,7 @@ import "../entity"
 
 // ObjectGateway .
 type ObjectGateway interface {
+	FindAll() ([]string, error)
 	Insert(objectName string, instance interface{}) (entity.Object, error)
 	Find(objectName string) []entity.Object
 	FindByID(objectName string, objectID string) (entity.Object, error)

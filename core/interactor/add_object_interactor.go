@@ -19,6 +19,6 @@ type AddObjectInteractorImpl struct {
 
 // Add inserts new object.
 func (interactor AddObjectInteractorImpl) Add(objectName string, instance interface{}) (entity.Object, error) {
-	insertInstance := interactor.Factory.CreateWithIDAndTime(instance)
+	insertInstance := interactor.Factory.CreateWithDateTime(instance)
 	return interactor.Gateway.Insert(objectName, insertInstance)
 }

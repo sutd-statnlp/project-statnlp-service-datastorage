@@ -36,20 +36,20 @@ func (db RethinkDB) CreateTable(tableName string) bool {
 }
 
 // GetTableNames .
-func (db RethinkDB) GetTableNames() []string {
+func (db RethinkDB) GetTableNames() ([]string, error) {
 	res, err := r.DB(constant.DatabaseName).
 		TableList().
 		Run(db.Session)
 	if err != nil {
-		return []string{}
+		return []string{}, err
 	}
 	defer res.Close()
 	var rows []string
 	err = res.All(&rows)
 	if err != nil {
-		return []string{}
+		return []string{}, err
 	}
-	return rows
+	return rows, nil
 }
 
 // ContainTable .
@@ -72,14 +72,16 @@ func (db RethinkDB) ContainTable(tableName string) bool {
 
 // Insert .
 func (db RethinkDB) Insert(tableName string, instance interface{}) (entity.Object, error) {
-	_, err := r.DB(constant.DatabaseName).
+	res, err := r.DB(constant.DatabaseName).
 		Table(tableName).
 		Insert(instance).
 		RunWrite(db.Session)
 	if err != nil {
 		return entity.Object{}, err
 	}
-	return instance.(entity.Object), nil
+	result := instance.(entity.Object)
+	result.ID = res.GeneratedKeys[0]
+	return result, nil
 }
 
 // Find .

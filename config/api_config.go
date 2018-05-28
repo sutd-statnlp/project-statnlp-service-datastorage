@@ -59,6 +59,7 @@ func SetAPIPaths(router *gin.Engine) {
 	apiGroup := router.Group("/api")
 	{
 		apiGroup.POST("/objects/:objectName", addObjectAPI.Add)
+		apiGroup.GET("/objects", getObjectAPI.GetAllObjectNames)
 		apiGroup.GET("/objects/:objectName", getObjectAPI.Get)
 		apiGroup.GET("/objects/:objectName/:objectId", getObjectAPI.GetByObjectID)
 		apiGroup.PUT("/objects/:objectName/:objectId", updateObjectAPI.Update)

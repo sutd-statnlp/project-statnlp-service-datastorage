@@ -7,6 +7,11 @@ type ObjectGatewayImpl struct {
 	Datatbase CommonDatabase
 }
 
+// FindAll .
+func (gateway ObjectGatewayImpl) FindAll() ([]string, error) {
+	return gateway.Datatbase.GetTableNames()
+}
+
 // Insert .
 func (gateway ObjectGatewayImpl) Insert(objectName string, instance interface{}) (entity.Object, error) {
 	if !gateway.Datatbase.ContainTable(objectName) {

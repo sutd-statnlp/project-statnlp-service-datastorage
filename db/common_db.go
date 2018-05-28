@@ -9,7 +9,7 @@ import (
 type CommonDatabase interface {
 	Connect() *r.Session
 	CreateTable(tableName string) bool
-	GetTableNames() []string
+	GetTableNames() ([]string, error)
 	ContainTable(tableName string) bool
 	Insert(tableName string, instance interface{}) (entity.Object, error)
 	Find(tableName string) []entity.Object
