@@ -12,6 +12,6 @@ func main() {
 	config.SetMiddleWares(router)
 	config.SetAPIPaths(router)
 
-	router.Run(":9000")
+	router.Run(":8230")
 
 }

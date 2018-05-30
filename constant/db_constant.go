@@ -2,7 +2,7 @@ package constant
 
 const (
 	// RethinkHostAddress .
-	RethinkHostAddress = "localhost:28015"
+	RethinkHostAddress = ":28015"
 	// DatabaseName .
 	DatabaseName = "statnlpdb"
 )
