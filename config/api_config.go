@@ -47,7 +47,7 @@ func CreateDeleteObjectAPI(gateway gateway.ObjectGateway) api.DeleteObjectAPI {
 }
 
 // SetAPIPaths sets API paths.
-func SetAPIPaths(router *gin.Engine) {
+func SetAPIPaths(router *gin.Engine, middleware gin.HandlerFunc) *gin.RouterGroup {
 	objectFactory := CreateObjectFactory()
 	objectGateWay := CreateObjectGateway()
 
@@ -57,6 +57,7 @@ func SetAPIPaths(router *gin.Engine) {
 	deleteObjectAPI := CreateDeleteObjectAPI(objectGateWay)
 
 	apiGroup := router.Group("/api")
+	apiGroup.Use(middleware)
 	{
 		apiGroup.POST("/objects/:objectName", addObjectAPI.Add)
 		apiGroup.GET("/objects", getObjectAPI.GetAllObjectNames)
@@ -65,4 +66,5 @@ func SetAPIPaths(router *gin.Engine) {
 		apiGroup.PUT("/objects/:objectName/:objectId", updateObjectAPI.Update)
 		apiGroup.DELETE("/objects/:objectName/:objectId", deleteObjectAPI.Delete)
 	}
+	return apiGroup
 }

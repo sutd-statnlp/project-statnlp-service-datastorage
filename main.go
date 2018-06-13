@@ -10,7 +10,7 @@ func main() {
 	router := gin.Default()
 
 	config.SetMiddleWares(router)
-	config.SetAPIPaths(router)
+	config.SetRoutes(router)
 
 	router.Run(":8230")
 
