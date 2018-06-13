@@ -13,3 +13,4 @@ build
 
 # Project-local glide cache
 .glide/
+temp

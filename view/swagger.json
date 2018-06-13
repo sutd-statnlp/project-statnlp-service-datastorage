@@ -5,14 +5,62 @@
         "version": "1.0.0",
         "title": "Object Storage"
     },
-    "basePath": "/api",
+    "basePath": "",
     "tags": [{
+        "name": "user",
+        "description": "User"
+    }, {
         "name": "object",
         "description": "Objects in Data Storage"
     }],
     "schemes": ["http"],
     "paths": {
-        "/objects": {
+        "/login": {
+            "post": {
+                "tags": ["user"],
+                "summary": "Logs user into the system",
+                "description": "",
+                "operationId": "loginUser",
+                "produces": ["application/xml", "application/json"],
+                "parameters": [{
+                    "name": "username",
+                    "in": "formData",
+                    "description": "The user name for login",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "password",
+                    "in": "formData",
+                    "description": "The password for login in clear text",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "headers": {
+                            "X-Rate-Limit": {
+                                "type": "integer",
+                                "format": "int32",
+                                "description": "calls per hour allowed by the user"
+                            },
+                            "X-Expires-After": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "date in UTC when token expires"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid username/password supplied"
+                    }
+                }
+            }
+        },
+        "/api/objects": {
             "get": {
                 "tags": ["object"],
                 "summary": "Find object's names",
@@ -30,10 +78,13 @@
                     "404": {
                         "description": "Object not found"
                     }
-                }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
             }
         },
-        "/objects/{objectName}": {
+        "/api/objects/{objectName}": {
             "get": {
                 "tags": ["object"],
                 "summary": "Find objects",
@@ -57,7 +108,10 @@
                     "404": {
                         "description": "Object not found"
                     }
-                }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
             },
             "post": {
                 "tags": ["object"],
@@ -87,11 +141,11 @@
                     }
                 },
                 "security": [{
-                    "objectstore_auth": ["write:objects", "read:objects"]
+                    "bearerAuth": []
                 }]
             }
         },
-        "/objects/{objectName}/{objectId}": {
+        "/api/objects/{objectName}/{objectId}": {
             "get": {
                 "tags": ["object"],
                 "summary": "Find object by ID",
@@ -121,7 +175,10 @@
                     "404": {
                         "description": "Object not found"
                     }
-                }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
             },
             "put": {
                 "tags": ["object"],
@@ -161,7 +218,10 @@
                     "405": {
                         "description": "Validation exception"
                     }
-                }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
             },
             "delete": {
                 "tags": ["object"],
@@ -189,8 +249,19 @@
                     "404": {
                         "description": "Object not found"
                     }
-                }
+                },
+                "security": [{
+                    "bearerAuth": []
+                }]
             }
+        }
+    },
+    "securityDefinitions": {
+        "bearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Login admin:admin, then copy the token and enter value: Bearer {token}"
         }
     },
     "definitions": { 
